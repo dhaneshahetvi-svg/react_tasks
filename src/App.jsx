@@ -12,9 +12,9 @@ import AuthGuard from './auth/AuthGuard'
 const DefaultRoute = () => {
   const loginData = JSON.parse(localStorage.getItem('loginData'));
   if (loginData) {
-    return <Navigat to = "/dashboard" replace />;
+    return <Navigate to = "/dashboard" replace />;
   }
-  return <Navigat to = "/login" replace />;
+  return <Navigate to = "/login" replace />;
 };
 
 function App() {
