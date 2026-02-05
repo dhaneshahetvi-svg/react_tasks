@@ -1,49 +1,49 @@
- const TaskList = () => {
-      return (
-        <div className="Tssk-grid">
-            {/* Task Card 1 */}
-            <div className="Task-card" style={ {position: 'relative'}}>
-                <h3>complete task manager UI styling</h3>
-                <p>Finish task manager UI and styling</p>
+import React from 'react'
 
-                <div className="task-meta">
-                    <span>Due: 2026-02-10</span>
-                    <span className="priority-badge priority-high"></span>
-                </div>
+const TaskList = ({tasks}) => {
+  return (
+    <>
+      <div className="task-grid">
 
-                <div className="task-actions">
-                    <button
-                    className="btn-icon"
-                    style={{background: '#00d2ff'}}
-                    title="Edit Task">
+        {/* Task Cars 1 */}
+        {tasks.map((tasks)=>(
+          <div className="task-card" style={{position: 'relative'}}>
+            <h3>{tasks.title}</h3>
+            <p>{tasks.description}</p>
 
-                        🖊
-
-                    </button>
-
-                    <button
-                    className="btn-icon"
-                    style={{background: '#00b894'}}
-                    title="Mark complete">
-                        
-                    ✔
-                    </button>
-
-                    <button
-                    className="btn-icon"
-                    style={{background: '#ff416c'}}
-                    title="Delete Task">
-
-                        🧺
-
-                    </button>
-
-
-                </div>
+            <div className="task-meta">
+                <span>Due: {tasks.dueDate}</span>
+                <span className="priority-badge priority-high">{tasks.priority}</span>
             </div>
-          
+
+            <div className="task-actions">
+                <button className='btn-icon' 
+                        style={{background: '#00d2ff'}} 
+                        title='Edit Task'
+                >
+                    ✏️
+                </button>
+
+                <button className='btn-icon' 
+                        style={{background: '#00b894'}} 
+                        title='Mark Complete'
+                >
+                    ✔️
+                </button>
+
+                <button className='btn-icon' 
+                        style={{background: '#ff416c'}} 
+                        title='Delete Task'
+                >
+                    🗑️
+                </button>
+            </div>
         </div>
-      )
-    }
-    
- export default TaskList;
+        ))}
+        
+      </div>
+    </>
+  )
+}
+
+export default TaskList

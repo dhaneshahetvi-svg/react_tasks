@@ -12,7 +12,7 @@ margin-bottom: 10px;
 display: block;
 text-align: left;
 }
-
+/* Page context so Navbar glass effect is visible */
 body {
 font-family: 'Inter', sans-serif;
 background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
