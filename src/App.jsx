@@ -5,7 +5,7 @@ import './App.css'
 import Header from './components/Header'
 import Register from './pages/Register'
 import Login from './pages/Login'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import AuthGuard from './auth/AuthGuard'
 
