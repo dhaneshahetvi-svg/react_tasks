@@ -1,64 +1,95 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import { Await, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TaskList from "../components/TaskList";
 import TaskForm from "../components/TaskForm";
 
 const Dashboard = () => {
-  const navigate = useNavigate()
-  const[tasks, setTasks] = useState([])
+  const navigate = useNavigate();
+  const [tasks, setTasks] = useState([]);
+  const [editTask, setEditTask] = useState();
+  const [showForm,setShowForm] =useState(false);
 
-  useEffect(()=>{
-    console.log("called after API",tasks);
-  },[tasks]);
-  useEffect(()=>{
+
+  useEffect(() => {
     fetchData();
-  },[]);
-   
+  }, []);
 
-  const fetchData =async () => {
+  const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3000/tasks");
-      const data = await response.JSON();
+      const data = await response.json();
       setTasks(data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleLogout = () =>{
-    // console.log('click from dashboard')
-    localStorage.removeItem('loginData')
-    localStorage.removeItem('authData')
-    // localStorage.clear()
-    navigate('/login')
-  }
+  useEffect(() => {
+    console.log("called after API", tasks);
+  }, [tasks]);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleAddTask= async(newTask)=>{
-    const tasktoAdd = {...newTask,completed:false}
-    try{
-      const response=await fetch("http://localhost:3000/tasks",{
+  const handleLogout = () => {
+    // console.log('click from dashboard')
+    localStorage.removeItem("loginData");
+    localStorage.removeItem("authData");
+    // localStorage.clear()
+    navigate("/login");
+  };
+
+  const handleaddTask = async(newTask) =>{
+    const tasktoAdd = {...newTask, completed: false}
+    try {
+      const response = await fetch("http://localhost:3000/tasks",{
         method: "POST",
-        headers: {"content-Type":"application/json"},
+        headers: {"Content-Type":"application/json"},
         body: JSON.stringify(tasktoAdd)
       });
       console.log(tasktoAdd)
       const data = await response.json();
-      setTasks([...tasks,data])
-    }catch (error){
+      setTasks([...tasks, data])
+    } catch (error) {
       console.log(error)
     }
-    
   }
 
+  const handleUpdateTask = async(updateTask) =>{
+    try{
+      await fetch(`http://localhost:3000/tasks/${updateTask.id}`,{
+        method: "PUT",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(updateTask)
+      })
+      setTasks(tasks.map((tasks)=>(tasks.id === updateTask.id ? {...updateTask} : tasks)))
+    } catch (error){
+      console.log(error);
+    }
+  };
+
+  const editingTask = (editingTask) =>{
+    console.log(editTask);
+    setEditTask(editingTask);
+  };
+  const handleDeleteTask = async(id) =>{
+    try{
+      await fetch('http://localhost:3000/task/${id}',{
+        method: "DELETE"
+      })
+      setTasks(tasks.filter((tasks) => tasks.id !==id))
+    }catch (error) {
+      console.log(error)
+    }
+  }
+  
   return (
     <div>
-
-      <NavBar title="Task Management" onLogout={handleLogout}/>
-     
+      <NavBar title="Task Management" isFormOpen={showForm} onAddTaskClick={() =>setShowForm(!setShowForm)} onLogout={handleLogout} />
+      <TaskForm addTask={handleaddTask} updateTask={handleUpdateTask} editingTask={editTask}/>
       <h1>MY TASKS</h1>
-    <TaskList tasks={tasks}/>
-       <TaskForm addTask={handleAddTask}/>
+      <TaskList tasks={tasks} editingTask={editingTask}  deletingTask={handleDeleteTask}/>
     </div>
   );
 };
